@@ -1,0 +1,68 @@
+If you are reading this, I take it you have managed to get the project off the CVS and into eclipse.
+
+1. Compiling
+Compiling this program can be a little tricky due to the external libraries used and their use of native code.
+First you need to tell eclipse where the external libraries are.
+Right-click on the project and go to Build Path -> Configure Build Path...
+Now click on the Libraries tab.  (This should only contain the JRE, if there are other things here someone commited their classpath to 
+the CVS.)
+If there are other libraries listed (should be jogl.jar and gluten.jar) remove them, via the handy remove button.
+Now that it is clean you need to add them back, the reason you had to remove them was it was probably looking for them in someone elses directory, which you don't have read permissions to.
+Click "Add External JARS..."
+Navigate to the directory you have the project in (default ~/eclipse-work/s09-lego) now go into the libs folder and select both jogl.jar and glugen-rt.jar (ctrl-click to select both)
+Now that you have the libraries properly linked you are ready to compile.
+Do that now, open the model package in eclipse and right-click LegoCAD.java Run As -> Java Application
+...
+...
+...
+Exceptions, lots of them
+This is caused by the Java VM not knowing where the native code for jogl is stored, so we need to explicitly tell it.
+Right click on LegoCAD.java again except this time go to Run As -> Run...
+Under the arguments tab copy the following line into VM Arguments
+-Djava.library.path=./libs
+Now Apply and Run.
+...
+If you are still having problems make sure you are launching LegoCAD and not some other program with that arguement.
+...
+Also you have to be careful when committing to the CVS and updating, if anyone sends in their .classpath you will have to remove and re-add the libraries for it to work again.
+
+
+2. JOGL
+JOGL stands for Java OpenGL, which is a wrapper for native C openGL code.  This allows for fast hardware accelerated graphics in Java.
+The main downsides is that it will need the native OpenGL code for each type of operating system.  I have these all stored in the libs directory.
+The *.dll are for windows, the *.so are for linux/unix and the *.jnilib is for macs.  Just leave these alone and intact and they shouldn't cause a problem.
+It has been tested and is working under Windows XP, Vista, OSX 10.5, and Ubuntu.
+
+The Jogl code inside the program is mostly in view/sceen and view/GLDisplay, I have attempted to comment scene as best I can, but GLDisplay is pretty barren.
+This is because GLDisplay sets up the window to be ready for rendering and shouldn't need any more work.
+
+If you have any questions about what the various openGL calls are and what they are doing feel free to check out the openGL API
+http://www.opengl.org/documentation/specs/man_pages/hardcopy/GL/html/
+
+
+3. LDraw
+We currently have 2 Ldraw directories inside the CVS /LDRAW and /test
+/LDRAW is the official way the directory should be set up and contains the approved parts
+/test is our own directory which is there for testing until the library can be parsed in correctly
+To understand how the LDraw format works you should read this short page.
+http://www.ldraw.org/Article218.html
+Here is a short example of a LDraw file
+
+-------------------------------------------------------------------
+0 ~Window  1 x  2 x  2 Classic with Solid Studs
+0 Name: 3081a.dat
+0 Author: Tore Eriksson [simlego]
+0 !LDRAW_ORG Unofficial_Part
+0 !LICENSE Redistributable under CCAL version 2.0 : see CAreadme.txt
+
+
+2 24 -16 48 -6 -4 48 -6
+2 24 4 48 -6 16 48 -6
+1 16 0 48 0 1 0 0 0 1 0 0 0 1 finger1.dat
+2 24 20 48 -12.5 20 42 -7
+2 24 -20 48 -12.5 -20 42 -7
+2 24 20 42 -7 20 2 -7
+2 24 -20 42 -7 -20 2 -7
+2 24 20 2 -7 20 2 -10
+...
+---------------------------------------------------------------------

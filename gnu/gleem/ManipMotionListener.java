@@ -1,0 +1,14 @@
+/*
+ * gleem -- OpenGL Extremely Easy-To-Use Manipulators.
+ * Copyright (C) 1998, 1999, 2002 Kenneth B. Russell (kbrussel@alum.mit.edu)
+ * See the file LICENSE.txt in the doc/ directory for licensing terms.
+ */
+
+package gnu.gleem;
+
+/** The interface which clients to the gleem library implement to
+    receive notification that a manipulator has moved. */
+
+public interface ManipMotionListener {
+  public void manipMoved(Manip manip);
+}
